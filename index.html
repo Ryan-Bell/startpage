@@ -25,8 +25,8 @@
 			] },
 			{ name: "Download", commands: [
 				{ key: 'T', name: 'TPB', url: 'https://thepiratebay.org', search: '/search/{}' },
-				{ key: 'Y', name: 'YIFY', url: 'https://yts.ag/browse-movies/0/1080p/all/7/latest', search: '/browse-movies/{}/1080p/all/0/rating' },
-				{ key: '7', name: '7digital', url: 'https://us.7digital.com', search: '/search?q={}' },
+				{ key: 'R', name: 'RARBG', url: 'https://rarbg.to/torrents.php', search: '/browse-movies/{}/1080p/' },
+				{ key: 'C', name: 'CG', url: 'https://cgpeers.com/login.php', search: false},
 			] },
 		],
 
@@ -493,4 +493,3 @@
 	const parser = new QueryParser();
 	const form = new Form(help, history, suggester, parser);
 </script>
-
