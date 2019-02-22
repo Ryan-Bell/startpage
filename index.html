@@ -7,10 +7,19 @@
 <body>
   <div id="backgroundc">
     <div id="container">
+      <div id="header">
+        <h3 style="display: inline">
+          <span class="red"> ~ </span><span class="green"> weather</span>
+        </h3>
+        <br/>
+        <h3 style="display: inline">
+          <span class="gray"></span> <pre class="gray" id="weatherdiv"></pre>
+        </h3>
+      </div>
       <div id="links">
         <div class="linksbox">
           <h3><span class="red"> ~ [General]</span><span class="blue">:</span> ls</h3>
-          <a class="cyan" target="blank" href="http://amazon.in">Amazon</a>
+          <a class="cyan" target="blank" href="http://amazon.com">Amazon</a>
           <a class="pink"  target="blank" href="https://gmail.com">Gmail</a>
           <a class="cyan" target="blank" href="https://youtube.com">Youtube</a>
           <a class="cyan" target="blank" href="https://github.com/">Github</a>
@@ -33,19 +42,19 @@
         </div>
       </div>
       <div id="header">
-				<h3 style="display: inline">
+        <h3 style="display: inline">
           <span class="red"> ~ </span><span class="green"> uptime</span>
         </h3>
         <br/>
-				<h3 style="display: inline">
+        <h3 style="display: inline">
           <span class="gray"></span> <span class="gray" id="uptimeSpan"></span>
         </h3>
-			</div>
+      </div>
     </div>
   </div>
   <script>
-    function loadXMLDoc() {
-      var xmlhttp = new XMLHttpRequest();
+    function loadUptime() {
+      let xmlhttp = new XMLHttpRequest();
 
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
@@ -63,8 +72,34 @@
 
       xmlhttp.open("GET", "/uptime", true);
       xmlhttp.send();
+    };
+    loadUptime();
+
+    function loadWeather() {
+      let xmlhttp = new XMLHttpRequest();
+
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+          if (xmlhttp.status == 200) {
+            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+          }
+          else if (xmlhttp.status == 400) {
+            alert('There was an error 400');
+            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+          }
+          else {
+            alert('something else other than 200 was returned');
+            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+          }
+        }
+      };
+
+      xmlhttp.open("GET", "/weather", true);
+      xmlhttp.send();
     }
-    loadXMLDoc();
+    loadWeather();
+
+
   </script>
 </body>
 </html>

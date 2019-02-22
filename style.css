@@ -16,7 +16,7 @@ html, body{
 }
 
 * {
-	font-family: 'Noto Sans';
+	font-family: 'Roboto Mono', monospace;
 	font-weight: lighter;
 }
 
