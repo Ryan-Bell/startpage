@@ -1,5 +1,6 @@
 const http = require('http');
 const fs = require('fs');
+const { spawn } = require('child_process');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -16,7 +17,16 @@ const onRequest = (request, response) => {
 
   console.log(request.url);
   switch (request.url) {
-    case '/success':
+    case '/uptime':
+      const child = spawn('uptime');
+      let aggregateData = '';
+      child.stdout.on('data', (data) => {
+        aggregateData += data;
+      });
+
+      child.on('exit', (code, signal) => {
+        sendResponse(aggregateData, 'text/plain');
+      });
       break;
     case '/style.css':
       style = fs.readFileSync(`${__dirname}/style.css`);
