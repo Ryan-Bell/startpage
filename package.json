@@ -1,0 +1,29 @@
+{
+  "name": "startpage",
+  "version": "1.0.0",
+  "description": "Computer setup specific startpage",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Pffft tests...\"",
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ryan-Bell/startpage.git"
+  },
+  "author": "Ryan Bell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ryan-Bell/startpage/issues"
+  },
+  "homepage": "https://github.com/Ryan-Bell/startpage#readme",
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  },
+  "dependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
