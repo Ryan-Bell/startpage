@@ -1,6 +1,8 @@
 const http = require('http');
 const fs = require('fs');
 const { spawn } = require('child_process');
+const ansiConverter = require('ansi-to-html');
+let converter = new ansiConverter();
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -44,7 +46,7 @@ const onRequest = (request, response) => {
         });
 
         child.on('exit', (code, signal) => {
-          sendResponse(aggregateData, 'text/plain');
+          sendResponse(converter.toHtml(aggregateData.toString()), 'text/plain');
         });
       })();
       break;
