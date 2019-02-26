@@ -5,51 +5,47 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="backgroundc">
-    <div id="container">
-      <div id="header">
-        <h3 style="display: inline">
-          <span class="red"> ~ </span><span class="green"> weather</span>
-        </h3>
-        <br/>
-        <h3 style="display: inline">
-          <span class="gray"></span> <pre class="gray" id="weatherdiv"></pre>
-        </h3>
+  <div id="container">
+    <div id="header">
+      <h3 style="display: inline">
+        <span class="red"> ~ </span><span class="green"> weather</span>
+      </h3>
+      <br/>
+      <pre class="gray" id="weatherdiv"></pre>
+    </div>
+    <div id="links">
+      <div class="linksbox">
+        <h3><span class="red"> ~ [General]</span><span class="blue">:</span> ls</h3>
+        <a class="cyan" target="blank" href="http://amazon.com">Amazon</a>
+        <a class="cyan"  target="blank" href="https://gmail.com">Gmail</a>
+        <a class="cyan" target="blank" href="https://youtube.com">Youtube</a>
+        <a class="cyan" target="blank" href="https://github.com/">Github</a>
       </div>
-      <div id="links">
-        <div class="linksbox">
-          <h3><span class="red"> ~ [General]</span><span class="blue">:</span> ls</h3>
-          <a class="cyan" target="blank" href="http://amazon.com">Amazon</a>
-          <a class="pink"  target="blank" href="https://gmail.com">Gmail</a>
-          <a class="cyan" target="blank" href="https://youtube.com">Youtube</a>
-          <a class="cyan" target="blank" href="https://github.com/">Github</a>
-        </div>
 
-        <div class="linksbox">
-          <h3><span class="red"> ~ [Reddit]</span><span class="blue">:</span> ls</h3>
-          <a class="cyan" target="blank" href="https://www.reddit.com">Front Page</a>
-          <a class="cyan" target="blank" href="https://www.reddit.com/r/plex/">/r/plex</a>
-          <a class="cyan" target="blank" href="https://www.reddit.com/r/unixporn/">/r/unixporn</a>
-          <a class="cyan" target="blank" href="https://www.reddit.com/r/askreddit/">/r/askreddit</a>
-        </div>
+      <div class="linksbox">
+        <h3><span class="red"> ~ [Reddit]</span><span class="blue">:</span> ls</h3>
+        <a class="cyan" target="blank" href="https://www.reddit.com">Front Page</a>
+        <a class="cyan" target="blank" href="https://www.reddit.com/r/plex/">/r/plex</a>
+        <a class="cyan" target="blank" href="https://www.reddit.com/r/unixporn/">/r/unixporn</a>
+        <a class="cyan" target="blank" href="https://www.reddit.com/r/askreddit/">/r/askreddit</a>
+      </div>
 
-        <div class="linksbox">
-          <h3><span class="red"> ~ [School]</span><span class="blue">:</span> ls</h3>
-          <a class="pink"  target="blank" href="https://mycourses.rit.edu">MyCourses</a>
-          <a class="cyan" target="blank" href="https://people.rit.edu/arwigm/430/">430</a>
-          <a class="cyan" target="blank" href="https://tigercenter.rit.edu">TigerCenter</a>
-          <a class="cyan" target="blank" href="https://eservices.rit.edu">eservices</a>
-        </div>
+      <div class="linksbox">
+        <h3><span class="red"> ~ [School]</span><span class="blue">:</span> ls</h3>
+        <a class="cyan"  target="blank" href="https://mycourses.rit.edu">MyCourses</a>
+        <a class="cyan" target="blank" href="https://people.rit.edu/arwigm/430/">430</a>
+        <a class="cyan" target="blank" href="https://tigercenter.rit.edu">TigerCenter</a>
+        <a class="cyan" target="blank" href="https://eservices.rit.edu">eservices</a>
       </div>
-      <div id="header">
-        <h3 style="display: inline">
-          <span class="red"> ~ </span><span class="green"> uptime</span>
-        </h3>
-        <br/>
-        <h3 style="display: inline">
-          <span class="gray"></span> <span class="gray" id="uptimeSpan"></span>
-        </h3>
-      </div>
+    </div>
+    <div id="header">
+      <h3 style="display: inline">
+        <span class="red"> ~ </span><span class="green"> uptime</span>
+      </h3>
+      <br/>
+      <h3 style="display: inline">
+        <span class="gray"></span> <span class="gray" id="uptimeSpan"></span>
+      </h3>
     </div>
   </div>
   <script>
@@ -73,31 +69,31 @@
       xmlhttp.open("GET", "/uptime", true);
       xmlhttp.send();
     };
-    loadUptime();
+loadUptime();
 
-    function loadWeather() {
-      let xmlhttp = new XMLHttpRequest();
+function loadWeather() {
+  let xmlhttp = new XMLHttpRequest();
 
-      xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
-          if (xmlhttp.status == 200) {
-            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-          }
-          else if (xmlhttp.status == 400) {
-            alert('There was an error 400');
-            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-          }
-          else {
-            alert('something else other than 200 was returned');
-            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-          }
-        }
-      };
-
-      xmlhttp.open("GET", "/weather", true);
-      xmlhttp.send();
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+      if (xmlhttp.status == 200) {
+        document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+      }
+      else if (xmlhttp.status == 400) {
+        alert('There was an error 400');
+        document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+      }
+      else {
+        alert('something else other than 200 was returned');
+        document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+      }
     }
-    loadWeather();
+  };
+
+  xmlhttp.open("GET", "/weather", true);
+  xmlhttp.send();
+}
+loadWeather();
 
 
   </script>
