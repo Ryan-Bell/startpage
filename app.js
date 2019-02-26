@@ -18,6 +18,9 @@ const onRequest = (request, response) => {
   }
 
   console.log(request.url);
+  //TODO docker, tasks list, plex information, simple auth system but I'm always logged in on local machine
+  //TODO remove github repos that are always private like old plex website
+  //endpoint to get colors set on computer so that they can be applied in css
   switch (request.url) {
     case '/uptime':
       const child = spawn('uptime');
@@ -32,7 +35,7 @@ const onRequest = (request, response) => {
       break;
     case '/weather':
       (function(){
-        const child = spawn('/home/mainuser/go/bin/weather', ['--server', 'http://morganfreeman.rit.edu:1234']);
+        const child = spawn('/home/mainuser/go/bin/weather', ['--server', 'http://morganfreeman.rit.edu:1234', '-ignore-alerts', '-hide-icon']);
         let aggregateData = '';
         child.on('error', (data) => {
           console.log('error');
