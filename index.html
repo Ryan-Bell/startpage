@@ -50,87 +50,65 @@
     <div id="header">
       <input type="text" id="listInput" placeholder="+ List item">
       <span onclick="addListItem()" class="addBtn">Add</span>
-      <span onclick="removeListItem()" class="removeBtn">Remove</span>
       <ul id="tasklist"></ul>
     </div>
   </div>
   <script>
-    function loadUptime() {
-      let xmlhttp = new XMLHttpRequest();
-
-      xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
-          if (xmlhttp.status == 200) {
-            document.getElementById("uptimeSpan").innerHTML = xmlhttp.responseText;
-          }
-          else if (xmlhttp.status == 400) {
-            alert('There was an error 400');
-          }
-          else {
-            alert('something else other than 200 was returned');
-          }
-        }
+    //Modified from https://plainjs.com/javascript/ajax/send-ajax-get-and-post-requests-47/
+    function getAjax(url, callback){
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState>3 && xhr.status==200) callback(xhr.responseText);
       };
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      xhr.send();
+      return xhr;
+    }
 
-      xmlhttp.open("GET", "/uptime", true);
-      xmlhttp.send();
+    function postAjax(url, data, callback){
+      let params = typeof data == 'string' ? data : Object.keys(data).map(
+        function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
+      ).join('&');
+
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', url);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState>3 && xhr.status==200) { callback(xhr.responseText); }
+      };
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.send(params);
+      return xhr;
+    }
+
+    function loadUptime() {
+      getAjax('/uptime', function(data){
+        document.getElementById("uptimeSpan").innerHTML = data;
+      });
     };
 
     loadUptime();
 
     function loadWeather() {
-      let xmlhttp = new XMLHttpRequest();
-
-      xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
-          if (xmlhttp.status == 200) {
-            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-          }
-          else if (xmlhttp.status == 400) {
-            alert('There was an error 400');
-            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-          }
-          else {
-            alert('something else other than 200 was returned');
-            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-          }
-        }
-      };
-
-      xmlhttp.open("GET", "/weather", true);
-      xmlhttp.send();
-    }
+      getAjax('/weather', function(data){
+        document.getElementById("weatherdiv").innerHTML = data;
+      });
+    };
 
     loadWeather();
 
     function loadTasks() {
-      let xmlhttp = new XMLHttpRequest();
-
-      xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
-          if (xmlhttp.status == 200) {
-            xmlhttp.responseText.split('\n').forEach(function(taskItem){
-              if (!taskItem) return;
-              let taskDomElement = document.createElement('li');
-              let textElement = document.createTextNode(taskItem.split('- ')[1]);
-              taskDomElement.appendChild(textElement);
-              document.getElementById("tasklist").appendChild(taskDomElement);
-            });
-          }
-          else if (xmlhttp.status == 400) {
-            alert('There was an error 400');
-            //document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-          }
-          else {
-            alert('something else other than 200 was returned');
-            //document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-          }
-        }
-      };
-
-      xmlhttp.open("GET", "/tasks", true);
-      xmlhttp.send();
-    }
+      getAjax('/tasks', function(data) {
+        data.split('\n').forEach(function(taskItem){
+          if (!taskItem) return;
+          let taskDomElement = document.createElement('li');
+          let textElement = document.createTextNode(taskItem.split('- ')[1]);
+          taskDomElement.appendChild(textElement);
+          document.getElementById("tasklist").appendChild(taskDomElement);
+        });
+      });
+    };
 
     loadTasks();
 
@@ -153,6 +131,10 @@
       span.appendChild(txt);
       li.appendChild(span);
     };
+
+    function removeListItem(e) {
+
+    }
 
   </script>
 </body>
