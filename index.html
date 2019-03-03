@@ -51,11 +51,7 @@
       <input type="text" id="listInput" placeholder="+ List item">
       <span onclick="addListItem()" class="addBtn">Add</span>
       <span onclick="removeListItem()" class="removeBtn">Remove</span>
-      <ul id="tasklist">
-        <li>Hit the gym</li>
-        <li class="checked">Pay bills</li>
-        <li>Organize office</li>
-      </ul>
+      <ul id="tasklist"></ul>
     </div>
   </div>
   <script>
@@ -113,10 +109,13 @@
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
           if (xmlhttp.status == 200) {
-            let taskDomElement = document.createElement('li');
-            let textElement = document.createTextNode(xmlhttp.responseText);
-            taskDomElement.appendChild(textElement);
-            document.getElementById("tasklist").appendChild(taskDomElement);
+            xmlhttp.responseText.split('\n').forEach(function(taskItem){
+              if (!taskItem) return;
+              let taskDomElement = document.createElement('li');
+              let textElement = document.createTextNode(taskItem.split('- ')[1]);
+              taskDomElement.appendChild(textElement);
+              document.getElementById("tasklist").appendChild(taskDomElement);
+            });
           }
           else if (xmlhttp.status == 400) {
             alert('There was an error 400');
@@ -134,6 +133,26 @@
     }
 
     loadTasks();
+
+    function addListItem(){
+      var li = document.createElement("li");
+      var inputValue = document.getElementById("listInput").value;
+      var t = document.createTextNode(inputValue);
+      li.appendChild(t);
+      if (inputValue === '') {
+        alert("Cannot create an empty task");
+      } else {
+        //TODO send to server and rerequest the list instead
+        document.getElementById("tasklist").appendChild(li);
+      }
+      document.getElementById("listInput").value = "";
+
+      var span = document.createElement("SPAN");
+      var txt = document.createTextNode("\u00D7");
+      span.className = "close";
+      span.appendChild(txt);
+      li.appendChild(span);
+    };
 
   </script>
 </body>
