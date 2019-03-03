@@ -35,7 +35,7 @@ const onRequest = (request, response) => {
       break;
     case '/weather':
       (function(){
-        const child = spawn('/home/mainuser/go/bin/weather', ['--server', 'http://morganfreeman.rit.edu:1234', '-ignore-alerts', '-hide-icon']);
+        const child = spawn('/home/mainuser/go/bin/weather', ['--server', 'http://morganfreeman.rit.edu:1234', '-ignore-alerts']);
         let aggregateData = '';
         child.on('error', (data) => {
           console.log('error');
@@ -53,6 +53,19 @@ const onRequest = (request, response) => {
         });
       })();
       break;
+    case '/tasks':
+      (function(){
+      const child = spawn('/home/mainuser/bin/t');
+      let aggregateData = '';
+      child.stdout.on('data', (data) => {
+        aggregateData += data;
+      });
+
+      child.on('exit', (code, signal) => {
+        sendResponse(aggregateData, 'text/plain');
+      });
+      })();
+      break;
     case '/style.css':
       style = fs.readFileSync(`${__dirname}/style.css`);
       sendResponse(style, 'text/css');
@@ -64,7 +77,6 @@ const onRequest = (request, response) => {
       sendResponse(index, 'text/html');
       break;
   }
-
 }
 
 http.createServer(onRequest).listen(port);

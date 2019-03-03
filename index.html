@@ -47,6 +47,16 @@
         <span class="gray"></span> <span class="gray" id="uptimeSpan"></span>
       </h3>
     </div>
+    <div id="header">
+      <input type="text" id="listInput" placeholder="+ List item">
+      <span onclick="addListItem()" class="addBtn">Add</span>
+      <span onclick="removeListItem()" class="removeBtn">Remove</span>
+      <ul id="tasklist">
+        <li>Hit the gym</li>
+        <li class="checked">Pay bills</li>
+        <li>Organize office</li>
+      </ul>
+    </div>
   </div>
   <script>
     function loadUptime() {
@@ -69,32 +79,61 @@
       xmlhttp.open("GET", "/uptime", true);
       xmlhttp.send();
     };
-loadUptime();
 
-function loadWeather() {
-  let xmlhttp = new XMLHttpRequest();
+    loadUptime();
 
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
-      if (xmlhttp.status == 200) {
-        document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-      }
-      else if (xmlhttp.status == 400) {
-        alert('There was an error 400');
-        document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-      }
-      else {
-        alert('something else other than 200 was returned');
-        document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
-      }
+    function loadWeather() {
+      let xmlhttp = new XMLHttpRequest();
+
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+          if (xmlhttp.status == 200) {
+            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+          }
+          else if (xmlhttp.status == 400) {
+            alert('There was an error 400');
+            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+          }
+          else {
+            alert('something else other than 200 was returned');
+            document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+          }
+        }
+      };
+
+      xmlhttp.open("GET", "/weather", true);
+      xmlhttp.send();
     }
-  };
 
-  xmlhttp.open("GET", "/weather", true);
-  xmlhttp.send();
-}
-loadWeather();
+    loadWeather();
 
+    function loadTasks() {
+      let xmlhttp = new XMLHttpRequest();
+
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+          if (xmlhttp.status == 200) {
+            let taskDomElement = document.createElement('li');
+            let textElement = document.createTextNode(xmlhttp.responseText);
+            taskDomElement.appendChild(textElement);
+            document.getElementById("tasklist").appendChild(taskDomElement);
+          }
+          else if (xmlhttp.status == 400) {
+            alert('There was an error 400');
+            //document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+          }
+          else {
+            alert('something else other than 200 was returned');
+            //document.getElementById("weatherdiv").innerHTML = xmlhttp.responseText;
+          }
+        }
+      };
+
+      xmlhttp.open("GET", "/tasks", true);
+      xmlhttp.send();
+    }
+
+    loadTasks();
 
   </script>
 </body>
