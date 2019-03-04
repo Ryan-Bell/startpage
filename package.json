@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Pffft tests...\"",
-    "start": "node ./src/server.js",
+    "start": "node ./src/app.js",
     "pretest": "eslint ./src --fix"
   },
   "repository": {
