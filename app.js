@@ -13,10 +13,9 @@ let index, style;
 
 const onRequest = (request, response) => {
 
-
-  const sendResponse = (body, contentType, statusCode = 200) => {
+  const sendResponse = (body, contentType, statusCode = 200, meta = false) => {
     response.writeHead(statusCode, {'Content-Type': contentType});
-    response.write(body);
+    if (!meta) response.write(body);
     response.end();
   }
 
@@ -35,16 +34,15 @@ const onRequest = (request, response) => {
 
   const addTask = (task) => {
     // simple sanatization of user input
-    if (task.match(/^[0-9a-zA-Z]{1,16}$/)){
+    if (task.match(/^[0-9a-z ]+$/i)){
       // add the task to the startpage list
       const child = spawn('/home/mainuser/bin/t', ['--list', 'startpage', task]);
       child.on('exit', (code, signal) => {
         sendResponse('successful', 'text/plain', 201);
       });
-
-    } else {
-      sendResponse('Must be 0-9 and a-Z', 'text/plain', 400);
-    }
+      return;
+    } 
+    sendResponse('Must be 0-9 and a-Z', 'text/plain', 400);
   };
 
   const handleWeather = () => {
@@ -68,7 +66,9 @@ const onRequest = (request, response) => {
   console.log(request.url);
   //TODO docker, tasks list, plex information, simple auth system but stay logged in on local machine
   //TODO endpoint to get colors set on computer so that they can be applied in css
-  switch (request.url) {
+  let meta = request.method == 'HEAD';
+  let parsedUrlPath = url.parse(request.url).pathname;
+  switch (parsedUrlPath) {
     case '/uptime':
       const child = spawn('uptime');
       let aggregateData = '';
@@ -77,7 +77,7 @@ const onRequest = (request, response) => {
       });
 
       child.on('exit', (code, signal) => {
-        sendResponse(aggregateData, 'text/plain');
+        sendResponse(aggregateData, 'text/plain', 200, meta);
       });
       break;
     case '/weather':
@@ -98,15 +98,15 @@ const onRequest = (request, response) => {
       break;
     case '/style.css':
       style = fs.readFileSync(`${__dirname}/style.css`);
-      sendResponse(style, 'text/css');
+      sendResponse(style, 'text/css', 200, meta);
       break;
     case '/':
     case '/index.html':
       index = fs.readFileSync(`${__dirname}/index.html`);
-      sendResponse(index, 'text/html');
+      sendResponse(index, 'text/html', 200, meta);
       break;
     default:
-      sendResponse('Page Not Found', 'text/plain', 404);
+      sendResponse('Page Not Found', 'text/plain', 404, meta);
       break;
   }
 }
