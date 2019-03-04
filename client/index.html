@@ -16,7 +16,7 @@
     <div id="links">
       <div class="linksbox">
         <h3><span class="red"> ~ [General]</span><span class="blue">:</span> ls</h3>
-        <a class="cyan" target="blank" href="http://amazon.com">Amazon</a>
+        <a class="cyan" target="blank" href="https://amazon.com">Amazon</a>
         <a class="cyan"  target="blank" href="https://gmail.com">Gmail</a>
         <a class="cyan" target="blank" href="https://youtube.com">Youtube</a>
         <a class="cyan" target="blank" href="https://github.com/">Github</a>
@@ -65,6 +65,7 @@
         if (xhr.readyState>3) callback(xhr.responseText, xhr.status);
       };
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      xhr.setRequestHeader('Accept', 'application/json');
       xhr.send();
       return xhr;
     }

@@ -13,7 +13,7 @@ const converter = new AnsiToHtml();
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 // index and style files
-let index; 
+let index;
 let style;
 
 const onRequest = (request, response) => {
@@ -52,6 +52,7 @@ const onRequest = (request, response) => {
 
   const meta = request.method === 'HEAD';
   const parsedUrlPath = url.parse(request.url).pathname;
+  const queryParams = url.parse(request.url, true).query;
 
   switch (parsedUrlPath) {
     case '/uptime':
@@ -59,16 +60,24 @@ const onRequest = (request, response) => {
         sendResponse(output, 'text/plain', 200, meta);
       });
       break;
-    case '/weather':
-      outputScript('/home/mainuser/go/bin/weather --server http://morganfreeman.rit.edu:1234 -ignore-alerts', (output) => {
+    case '/weather': {
+      let command = '/home/mainuser/go/bin/weather --server http://morganfreeman.rit.edu:1234 -ignore-alerts';
+
+      // if hideicon query param is set and not false then hide ascii art
+      if (queryParams && queryParams.hideicon) command += ' --hide-icon';
+      outputScript(command, (output) => {
         sendResponse(converter.toHtml(output), 'text/plain');
       });
       break;
+    }
     case '/tasks':
       if (request.method === 'POST') {
         let body = '';
         request.on('data', (chunk) => {
           body += chunk.toString();
+        });
+        request.on('error', () => {
+          sendResponse('{"message":"upload failed","id":"failedupload"}', 'application/json', 400);
         });
         request.on('end', () => {
           addTask(body);
