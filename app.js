@@ -28,8 +28,23 @@ const onRequest = (request, response) => {
     });
 
     child.on('exit', (code, signal) => {
+      //TODO look at the code?
       sendResponse(aggregateData, 'text/plain');
     });
+  };
+
+  const addTask = (task) => {
+    // simple sanatization of user input
+    if (task.match(/^[0-9a-zA-Z]{1,16}$/)){
+      // add the task to the startpage list
+      const child = spawn('/home/mainuser/bin/t', ['--list', 'startpage', task]);
+      child.on('exit', (code, signal) => {
+        sendResponse('successful', 'text/plain', 201);
+      });
+
+    } else {
+      sendResponse('Must be 0-9 and a-Z', 'text/plain', 400);
+    }
   };
 
   const handleWeather = () => {
@@ -69,7 +84,17 @@ const onRequest = (request, response) => {
       handleWeather();
       break;
     case '/tasks':
-      handleTasks();
+      if (request.method == 'POST') {
+        let body = '';
+        request.on('data', chunk => {
+          body += chunk.toString(); // convert Buffer to string
+        });
+        request.on('end', () => {
+          addTask(body);
+        });
+      } else {
+        handleTasks();
+      }
       break;
     case '/style.css':
       style = fs.readFileSync(`${__dirname}/style.css`);

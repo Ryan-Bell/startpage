@@ -59,7 +59,7 @@
       let xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
       xhr.onreadystatechange = function() {
-        if (xhr.readyState>3 && xhr.status==200) callback(xhr.responseText);
+        if (xhr.readyState>3) callback(xhr.responseText, xhr.status);
       };
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       xhr.send();
@@ -74,7 +74,7 @@
       let xhr = new XMLHttpRequest();
       xhr.open('POST', url);
       xhr.onreadystatechange = function() {
-        if (xhr.readyState>3 && xhr.status==200) { callback(xhr.responseText); }
+        if (xhr.readyState>3) { callback(xhr.responseText, xhr.status); }
       };
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -121,7 +121,15 @@
         alert("Cannot create an empty task");
       } else {
         //TODO send to server and rerequest the list instead
-        document.getElementById("tasklist").appendChild(li);
+        postAjax('/tasks', inputValue, function(data, status) {
+          if (status == 201) {
+            //clear tasks and reload them
+            document.getElementById('tasklist').innerHTML = '';
+            loadTasks();
+          } else if (status == 400) {
+            alert("Tasks must be 0-9 and a-Z");
+          }
+        });
       }
       document.getElementById("listInput").value = "";
 
