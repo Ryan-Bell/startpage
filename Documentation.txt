@@ -1,0 +1,52 @@
+### Site Purpose
+  
+  I built this web app to be the default url opened when I open a new tab or new
+  browser window. I wanted it to show useful information like weather or my task
+  list and have quick links to sites I often visit with clean, terminal-like css.
+
+
+
+### API Overview
+
+  In addition to the basic /, /index.html, and /style.css, I have these endpoints:
+
+  /uptime
+    - GET HEAD
+    - returns the time since the computer was turned on (and load) with a simple
+      call to uptime
+
+  /weather
+    - GET HEAD
+    - ?hideicon
+      When set, the large ascii art will not display
+    - connects to a docker container running on my computer that connects to 
+      Google Geocode for location services and Dark Sky Api for weather information
+      
+  /tasks
+    - GET HEAD POST
+    - Get requests pull down the current contents of the task list. There is a 
+      text box and 'Add' button to add item to the list. The list items are
+      written to a file on disk.
+
+
+### Post Mortem
+
+  What went right? Spawning child processes in node and having them work with both
+  binaries and custom bash scripts was surprisingly easy. I had a brief issue with
+  ansi color codes being returned by the child process but converting them to 
+  inline css tags was as easy as including an npm package.
+
+  What went wrong? The code should have a lot more comments and spacing and be 
+  broken up into multiple files. However, I when I started writing the app, I made
+  extensive use of nested scope to write little nested helper functions. Separating
+  everything out would require explicitly passing variables around and more code
+  but it would be a lot more readable.
+
+  With more time, I plan on displaying more information about things like docker,
+  plex library/streaming information, or hard drive space. I also want to have
+  the background to be a random image from reddit.com/r/wallpapers or something 
+  similar. Lastly, I want to add another api endpoint to grab the colorscheme on
+  my computer so the css terminal colors can match my real terminal colors.
+
+  I didn't really go above and beyond with this project besides using child
+  processes in node but I'll actually get to use this project daily which is nice.
